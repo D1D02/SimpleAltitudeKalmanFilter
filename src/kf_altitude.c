@@ -76,48 +76,43 @@ void kf_update( const float altitude, const float acceleration )
    // 1. State Vector
    free_matrix_float( x_k_n );
    x_k_n = product_matrices( A, x_pre );
-   printf("x_k_n:\r\n");
-   print_matrix( x_k_n );
    
    // 2. Uncertainty 
    free_matrix_float( P_k_n );
    P_k_n = sum_matrices( product_matrices( product_matrices( A, P_pre), transpose_matrix( A ) ), Q_k );
-   printf("P_k_n:\r\n");
-   print_matrix( P_k_n );
 
    // 3. Expected Observation
    free_matrix_float( y_k );
    y_k = difference_matrices(z_k, product_matrices( H_k, x_k_n ) );
-   printf("y_k:\r\n");
-   print_matrix( y_k );
 
    // 4. Kalman Gain
    free_matrix_float( K_k );
    matrix_float * tmp = sum_matrices( product_matrices( H_k, product_matrices( P_k_n, transpose_matrix( H_k ) ) ), R_noise);
    K_k = product_matrices( product_matrices ( P_k_n,  transpose_matrix( H_k ) ) , inverse_matrix( tmp ) );
-   printf("tmp\r\n");
-   print_matrix( tmp );
-   printf("inverse:\r\n");
-   print_matrix( inverse_matrix( sum_matrices( product_matrices( H_k, product_matrices( P_k_n, transpose_matrix( H_k ) ) ), R_noise) )  );
 
    // 5. Update State Estimation
    free_matrix_float( x_pre );
    x_pre = sum_matrices( product_matrices( K_k, y_k ), x_k_n ); 
-   printf("x_pre:\r\n");
-   print_matrix( x_pre );
    
    // 6. Covariance Correction
    free_matrix_float( P_pre );
    P_pre = product_matrices( difference_matrices( I, product_matrices( K_k, H_k ) ), P_k_n);
-   printf("P_pre:\r\n");
-   print_matrix( P_pre );
    
 }
 
 float get_filtered_altitude()
 {
-   //printf("Altitude: %f\r\n", x_pre->p_matrix[0][0]);
    return x_pre->p_matrix[0][0];
+}
+
+float get_filtered_velocity()
+{
+   return x_pre->p_matrix[1][0];
+}
+
+float get_filtered_acceleration()
+{
+   return x_pre->p_matrix[2][0];
 }
 
 matrix_float * transition_matrix_init()
