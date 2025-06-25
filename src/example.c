@@ -19,7 +19,7 @@ int main()
 
    fptr_i = fopen("./test/example.csv", "r"); //Input file 
    fptr_o = fopen("./test/filtered.csv", "w"); //Output file
-   if( fptr_i == NULL )
+   if( fptr_i == NULL || fptr_o == NULL )
    {
    
    	printf( "File opening failed.\r\n" );
@@ -27,6 +27,7 @@ int main()
    	
    }
    fgets( line, sizeof(line), fptr_i ); //Avoid the first line
+   fputs( "Alt,Vel,Acc\n", fptr_o );
 
 
    while( fgets( line, sizeof(line), fptr_i ) )
