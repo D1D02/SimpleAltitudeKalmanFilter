@@ -58,8 +58,8 @@ In the prediction phase, the filter estimates the current state and its uncertai
 
 $$
 \begin{align*}
-\mathbf{x}_k &= \mathbf{A} \cdot \mathbf{x}_k \\
-\mathbf{P}_k &= \mathbf{A} \cdot \mathbf{P}_k \cdot \mathbf{A}^\text{T} + \mathbf{Q} \\
+\mathbf{x}_k &= \mathbf{A} \cdot \mathbf{x}_{k-1} \\
+\mathbf{P}_k &= \mathbf{A} \cdot \mathbf{P}_{k-1} \cdot \mathbf{A}^\text{T} + \mathbf{Q} \\
 \mathbf{y} &= \mathbf{z}_k - \mathbf{H} \cdot \mathbf{x}_k \quad \\
 \mathbf{K} &= \mathbf{P}_k \cdot \mathbf{H}^\text{T} \cdot (\mathbf{H} \cdot \mathbf{P}_k \cdot \mathbf{H}^\text{T} + \mathbf{R})^{-1} \quad \\
 \mathbf{x}_k &= \mathbf{x}_k + \mathbf{K} \cdot \mathbf{y} \quad \\
@@ -67,8 +67,6 @@ $$
 \end{align*}
 $$
 
-> [!WARNING]
-> There are some problems about subscript not working properly: I will fix it asap.
 
 ## Filter tuning
 If you want to change the kalman filter parameters, you can modify .c files. To alter the delta sampling time, you need to navigate to **/inc/kf_altitude.h** and modify 
